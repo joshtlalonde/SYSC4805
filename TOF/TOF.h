@@ -13,7 +13,6 @@ class TOF {
 
     public:
       TOF(int outPin, uint16_t threshold, uint8_t width, uint8_t height);
-      static TOF* TOFInstance;
       uint16_t getDistance();
       bool getDetectionStatus();
       void start();

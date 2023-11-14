@@ -1,6 +1,5 @@
 #include "TOF.h"
 
-TOF *TOF::TOFInstance = nullptr;
 VL53L1X sensor;
 
 // Constructor definition
@@ -12,7 +11,6 @@ TOF::TOF(int outPin, uint16_t threshold, uint8_t width, uint8_t height) {
     // set to 16x16 for FOV to be 27 degrees
     fov[0] = width;
     fov[1] = height;
-    TOFInstance = this;
 }
 
 // Start sensor
