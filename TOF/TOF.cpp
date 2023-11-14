@@ -4,8 +4,9 @@ TOF *TOF::TOFInstance = nullptr;
 VL53L1X sensor;
 
 // Constructor definition
-TOF::TOF(int outPin, uint8_t width, uint8_t height) {
+TOF::TOF(int outPin, uint16_t threshold, uint8_t width, uint8_t height) {
     detected = false;
+    threshold = threshold;
     detectionDistance = 4000;
     // set to 4x4 for FOV to be 15 degrees
     // set to 16x16 for FOV to be 27 degrees
@@ -53,5 +54,15 @@ uint16_t TOF::getDistance() {
     // Read sensor values
     sensor.read();
     detectionDistance = sensor.ranging_data.range_mm;
+    if (detectionDistance <= threshold) {
+      detected = true;
+    } else {
+      detected = false;
+    }
     return detectionDistance;
+}
+
+// Get detection status
+bool TOF::getDetectionStatus() {
+  return detected;
 }
