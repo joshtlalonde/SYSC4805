@@ -1,11 +1,11 @@
 #include "LineDetector.h"
 
-#define OUT1RIGHT 10
-#define OUT2RIGHT 13
-#define OUT3RIGHT 12
-#define OUT1LEFT 5
-#define OUT2LEFT 4
-#define OUT3LEFT 14
+#define OUT1RIGHT 14
+#define OUT2RIGHT 4
+#define OUT3RIGHT 5
+#define OUT1LEFT 12
+#define OUT2LEFT 13
+#define OUT3LEFT 10
 
 // Initialize Line Detectors
 LineDetector lineDetectorL(OUT1LEFT, OUT2LEFT, OUT3LEFT);

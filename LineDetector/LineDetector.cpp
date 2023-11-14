@@ -1,6 +1,7 @@
 #include "LineDetector.h"
 
-LineDetector* LineDetector::lineDetectorInstance = nullptr;
+LineDetector* LineDetector::lineDetectorInstance[MAX_NUM_LINE_DETECTORS] = {NULL, NULL};
+int LineDetector::whichInstance = 0;
 
 // Constructor definition
 LineDetector::LineDetector(int out1Pin, int out2Pin, int out3Pin) {
@@ -9,32 +10,40 @@ LineDetector::LineDetector(int out1Pin, int out2Pin, int out3Pin) {
   sensorLeft = out2Pin;
   sensorMiddle = out3Pin;
 
-  lineDetectorInstance = this; // Set the global instance pointer
-
-  Serial.println("Setting Input Pins: ");
-  Serial.printf("sensorRight: %d, sensorRight: %d, sensorRight: %d\n", sensorRight, sensorLeft, sensorMiddle);
-
   // Set PIN Mode
-  pinMode(out1Pin, INPUT);
-  pinMode(out2Pin, INPUT);
-  pinMode(out3Pin, INPUT);
+  pinMode(sensorRight, INPUT);
+  pinMode(sensorLeft, INPUT);
+  pinMode(sensorMiddle, INPUT);
 
   // Attach Interrupts for each pin
-  attachInterrupt(digitalPinToInterrupt(out1Pin), LineDetector::detecting, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(out2Pin), LineDetector::detecting, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(out3Pin), LineDetector::detecting, CHANGE);
+  if (whichInstance == 0) {
+    attachInterrupt(digitalPinToInterrupt(sensorRight), interrupt0, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(sensorLeft), interrupt0, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(sensorMiddle), interrupt0, CHANGE);
+  } 
+  else if (whichInstance == 1) {
+    attachInterrupt(digitalPinToInterrupt(sensorRight), interrupt1, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(sensorLeft), interrupt1, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(sensorMiddle), interrupt1, CHANGE);
+  } 
+  else {
+    Serial.println("Exceeded MAX_NUM_LINE_DETECTORS (2)");
+  }
+
+  // Needed to handle interupts in a class
+  lineDetectorInstance[whichInstance] = this;
+  whichInstance++;
 }
 
 
-void ICACHE_RAM_ATTR LineDetector::detecting() {
-  if (lineDetectorInstance != nullptr) {
-    // Implementation goes here
-    // You can access non-static members via the instance pointer, like this:
-    if (!digitalRead(lineDetectorInstance->sensorRight) || !digitalRead(lineDetectorInstance->sensorLeft) || !digitalRead(lineDetectorInstance->sensorMiddle)) {
-      lineDetectorInstance->detected = true;
-    } else {
-      lineDetectorInstance->detected = false;
-    }
+void LineDetector::detecting() {
+  // Check if any pins are logical LOW
+  if (!digitalRead(sensorRight) || !digitalRead(sensorLeft) || !digitalRead(sensorMiddle)) {
+    detected = true;
+  } 
+  // Reset on logical HIGH
+  else {
+    detected = false;
   }
 }
 
