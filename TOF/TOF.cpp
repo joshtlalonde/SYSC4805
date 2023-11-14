@@ -4,18 +4,18 @@ VL53L1X sensor;
 
 // Constructor definition
 TOF::TOF(int outPin, uint16_t threshold, uint8_t width, uint8_t height) {
-    detected = false;
-    threshold = threshold;
-    detectionDistance = 4000;
+    this->detected = false;
+    this->threshold = threshold;
+    this->detectionDistance = 4000;
     // set to 4x4 for FOV to be 15 degrees
     // set to 16x16 for FOV to be 27 degrees
-    fov[0] = width;
-    fov[1] = height;
+    this->fov[0] = width;
+    this->fov[1] = height;
 }
 
 // Start sensor
 void TOF::start() {
-    
+
     Wire.begin();
     Wire.setClock(400000); // use 400 kHz I2C
 
@@ -51,16 +51,16 @@ void TOF::stop() {
 uint16_t TOF::getDistance() {
     // Read sensor values
     sensor.read();
-    detectionDistance = sensor.ranging_data.range_mm;
-    if (detectionDistance <= threshold) {
-      detected = true;
+    this->detectionDistance = sensor.ranging_data.range_mm;
+    if (this->detectionDistance <= this->threshold) {
+      this->detected = true;
     } else {
-      detected = false;
+      this->detected = false;
     }
-    return detectionDistance;
+    return this->detectionDistance;
 }
 
 // Get detection status
 bool TOF::getDetectionStatus() {
-  return detected;
+  return this->detected;
 }
