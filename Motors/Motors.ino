@@ -14,4 +14,12 @@ void setup()
 
 void loop()
 {
+  motors.motorsOn();
+  delay(2000);
+  motors.motorsOff();
+  delay(2000);
+  motors.turn(0); // Turn Right
+  delay(2000);
+  motors.turn(1); // Turn Left
+  delay(2000);
 }
