@@ -28,7 +28,7 @@ Motors motors(RIGHT_SPEED_PIN, RIGHT_DIR_PIN, LEFT_SPEED_PIN, LEFT_DIR_PIN);
 
 const int outPin = 9;
 volatile int detected = LOW;
-const int DELAY = 600;
+const int DELAY = 10;
 
 // Initialize States
 enum State {

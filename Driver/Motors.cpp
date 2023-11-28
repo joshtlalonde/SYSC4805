@@ -2,6 +2,8 @@
 
 // Motors *Motors::motorsInstance = nullptr;
 
+#define SPEED 100
+
 Motors::Motors(int rightSpeedPin, int rightDirPin, int leftSpeedPin, int leftDirPin) : motorRight(PWM_DIR, rightSpeedPin, rightDirPin), motorLeft(PWM_DIR, leftSpeedPin, leftDirPin)
 {
     // motorsInstance = this;
@@ -9,8 +11,8 @@ Motors::Motors(int rightSpeedPin, int rightDirPin, int leftSpeedPin, int leftDir
 
 void Motors::motorsOn()
 {
-    motorRight.setSpeed(-255);
-    motorLeft.setSpeed(255);
+    motorRight.setSpeed(-SPEED);
+    motorLeft.setSpeed(SPEED);
 }
 
 void Motors::motorsOff()
@@ -21,12 +23,12 @@ void Motors::motorsOff()
 
 void Motors::turnRight()
 {
-    motorRight.setSpeed(255);
-    motorLeft.setSpeed(255);
+    motorRight.setSpeed(SPEED+50);
+    motorLeft.setSpeed(SPEED+50);
 }
 
 void Motors::turnLeft()
 {
-    motorRight.setSpeed(-255);
-    motorLeft.setSpeed(-255);
+    motorRight.setSpeed(-SPEED-50);
+    motorLeft.setSpeed(-SPEED-50);
 }
