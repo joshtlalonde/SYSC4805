@@ -18,8 +18,8 @@ void loop()
   delay(2000);
   motors.motorsOff();
   delay(2000);
-  motors.turn(0); // Turn Right
+  motors.turnRight(); // Turn Right
   delay(2000);
-  motors.turn(1); // Turn Left
+  motors.turnLeft(); // Turn Left
   delay(2000);
 }

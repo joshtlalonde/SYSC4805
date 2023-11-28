@@ -26,6 +26,10 @@ TOF tof(OUT, THRESHOLD, WIDTH, HEIGHT);
 #define LEFT_DIR_PIN 4
 Motors motors(RIGHT_SPEED_PIN, RIGHT_DIR_PIN, LEFT_SPEED_PIN, LEFT_DIR_PIN);
 
+const int outPin = 9;
+volatile int detected = LOW;
+const int DELAY = 600;
+
 // Initialize States
 enum State {
   DETECTING,
@@ -40,10 +44,14 @@ State nextState = currentState;
 void setup() {
   // Your setup code here
   Serial.begin(115200);
+  pinMode(outPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(outPin), detecting, CHANGE);
 
   // Start TOF sensor
-  tof.start();
+  // tof.start();
 }
+
+int stopped = 0, forward = 0, turning = 0;
 
 void loop() {
   currentState = nextState;
@@ -53,8 +61,9 @@ void loop() {
 
     // Poll the TOF and Line Sensors
     // If line or object detected move to DETECTED
-    if (lineDetectorL.getDetected() || lineDetectorR.getDetected() || tof.getDetectionStatus()) {
+    if (detected) { //|| lineDetectorL.getDetected() || lineDetectorR.getDetected()) { //|| tof.getDetectionStatus()) {
       nextState = DETECTED;
+      forward = 0;
     }
     // Else move to FORWARD
     else {
@@ -67,10 +76,14 @@ void loop() {
     Serial.println("STATE: FORWARD");
 
     Serial.println("Driving Forward");
-    motors.motorsOn();
+    if (!forward) {
+      motors.motorsOn();
+    }
+    forward = 1;
 
     // Move back to DETECTING
     nextState = DETECTING;
+    delay(DELAY);
   }
 
   if (currentState == DETECTED) {
@@ -78,10 +91,14 @@ void loop() {
 
     // Stop Driving
     Serial.println("Stop Driving");
-    motors.motorsOff();
-
+    if (!stopped) {
+      motors.motorsOff();
+    }
+    stopped = 1;
+    
     // Always turns right
     nextState = TURN_RIGHT;
+    delay(DELAY);
   }
 
   if (currentState == TURN_RIGHT) {
@@ -92,13 +109,29 @@ void loop() {
 
     // Else Turn right
     Serial.println("Turn Right");
-    motors.turnRight();
+    if (!turning) {
+      motors.turnRight();
+    }
+    turning = 1;
 
     // When TOF does not detect an object move back to DETECTING
-    if (!tof.getDetectionStatus()) {
+    if (!detected) {
       nextState = DETECTING;
+      turning = 0;
+      stopped = 0;
     }
+    delay(DELAY);
   }
 
-  // delay(1000); // FOR DEBUGGING
+ // delay(100); // FOR DEBUGGING
+}
+
+void detecting() {
+  if (!digitalRead(outPin)) {
+    detected = true;
+  } 
+  // Check if  HIGH
+  else {
+    detected = false;
+  }
 }
