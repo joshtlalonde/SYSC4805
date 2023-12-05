@@ -39,7 +39,7 @@ void TOF::start() {
     // Start continuous readings at a rate of one measurement every 50 ms (the
     // inter-measurement period). This period should be at least as long as the
     // timing budget.
-    sensor.startContinuous(50);
+    sensor.startContinuous(100);
 }
 
 // Stop sensor
@@ -57,10 +57,20 @@ uint16_t TOF::getDistance() {
     } else {
       this->detected = false;
     }
+    
     return this->detectionDistance;
 }
 
 // Get detection status
 bool TOF::getDetectionStatus() {
+  // Read sensor values
+  sensor.read();
+  this->detectionDistance = sensor.ranging_data.range_mm;
+  if (this->detectionDistance <= this->threshold) {
+    this->detected = true;
+  } else {
+    this->detected = false;
+  }
+
   return this->detected;
 }

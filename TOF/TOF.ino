@@ -15,8 +15,8 @@ void setup(){
 }
 
 void loop(){
-  Serial.print("Distance (mm): ");
-  Serial.println(tof.getDistance());
+  // Serial.print("Distance (mm): ");
+  // Serial.println(tof.getDistance());
   Serial.print("Detection Status: ");
   Serial.println(tof.getDetectionStatus());
   delay(500);
