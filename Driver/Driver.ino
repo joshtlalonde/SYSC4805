@@ -105,6 +105,18 @@ void loop() {
     Serial.println("Turn Right");
     motors.turnRight();
 
+    // When TOF does not detect an object move back to FORWARD
+    if ((analogRead(OUT1RIGHT) < 900 && analogRead(OUT2RIGHT) < 900 && analogRead(OUT3RIGHT) < 900 && 
+        analogRead(OUT2LEFT) < 900 && analogRead(OUT3LEFT) < 900) &&
+        !irL.getDetected() && !irR.getDetected())  
+    {
+      // Move to the FORWARD state
+      nextState = FORWARD;
+    }
+    else {
+      // Else Turn right
+      nextState = TURN_RIGHT;
+    }
     nextState = FORWARD;
   }
 
