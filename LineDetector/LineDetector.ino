@@ -18,6 +18,7 @@ void setup() {
 
 void loop() {
   printf("RightLineDetector: %d, LeftLineDetector: %d\n", lineDetectorR.getDetected(), lineDetectorL.getDetected());
+
   Serial.print(analogRead(OUT1LEFT));
   Serial.print(" ");
   Serial.print(analogRead(OUT2LEFT));
@@ -31,5 +32,6 @@ void loop() {
   Serial.print(" ");
   Serial.print(analogRead(OUT3RIGHT));
   Serial.println();
+
   delay(500);
 }
