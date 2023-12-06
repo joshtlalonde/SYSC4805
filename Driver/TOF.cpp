@@ -15,14 +15,13 @@ TOF::TOF(int outPin, uint16_t threshold, uint8_t width, uint8_t height) {
 
 // Start sensor
 void TOF::start() {
-
     Wire.begin();
     Wire.setClock(400000); // use 400 kHz I2C
 
     sensor.setTimeout(500);
-    if (!sensor.init()) {
+    while (!sensor.init()) {
         Serial.println("Failed to detect and initialize sensor!");
-        while (1);
+        delay(1000);
     }
 
     // Set FOV
@@ -39,7 +38,7 @@ void TOF::start() {
     // Start continuous readings at a rate of one measurement every 50 ms (the
     // inter-measurement period). This period should be at least as long as the
     // timing budget.
-    sensor.startContinuous(100);
+    sensor.startContinuous(50);
 }
 
 // Stop sensor
@@ -64,7 +63,7 @@ uint16_t TOF::getDistance() {
 // Get detection status
 bool TOF::getDetectionStatus() {
   // Read sensor values
-  sensor.read();
+  sensor.timeoutOccurred() ? 0 : sensor.read();
   this->detectionDistance = sensor.ranging_data.range_mm;
   if (this->detectionDistance <= this->threshold) {
     this->detected = true;

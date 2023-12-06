@@ -25,7 +25,11 @@ Cloning is how you download the repo onto your computer to begin working on the 
     - Copy the https url
   - Now to download using git clone
     - Open the terminal and cd into a directory you would like to download the repo to
+<<<<<<< HEAD
     - Run the following command: `git clone https://<GHusername>:<Token>@github.com/<GHusername>/SYSC4907-Teleoperated-Robot.git`
+=======
+    - Run the following command: `git clone https://<GHusername>:<Token>github.com/<GHusername>/SYSC4805.git`
+>>>>>>> 89cb16379626ecec522961863368ef33e4bf59bf
       - GHusername: is your github username
       - Token: is the token we previously generated
   - This should download the git repo into the current directory

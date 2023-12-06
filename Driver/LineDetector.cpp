@@ -38,7 +38,7 @@ LineDetector::LineDetector(int out1Pin, int out2Pin, int out3Pin) {
 
 void LineDetector::detecting() {
   // Check if any pins are logical LOW
-  if (!digitalRead(sensorRight) || !digitalRead(sensorLeft) || !digitalRead(sensorMiddle)) {
+  if (digitalRead(sensorRight) || digitalRead(sensorLeft) || digitalRead(sensorMiddle)) {
     detected = true;
   } 
   // Reset on logical HIGH

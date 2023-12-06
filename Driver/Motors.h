@@ -15,6 +15,9 @@ public:
 private:
     CytronMD motorRight;
     CytronMD motorLeft;
+    bool forward;
+    bool left;
+    bool right;
 };
 
 #endif
